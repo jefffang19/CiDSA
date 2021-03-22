@@ -195,7 +195,7 @@ def training(train_data, train_data2=None, train_data3=None, train_data4=None, o
 
     # train model for N epochs
     max_valid_score = 0
-    EPOCH = 100
+    EPOCH = 500
     for epoch in range(EPOCH):
 
         torch.cuda.empty_cache()
