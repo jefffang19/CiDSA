@@ -32,7 +32,7 @@ Python Version: 3.6.12
 ```
 或執行
 ```
-python app.py --mode eval --training dataset/eletricity/2020年度每日尖峰備轉容量率.csv --training2 dataset/eletricity/2021年度每日尖峰備轉容量率.csv --weather_past dataset/weather/weather_day.csv --weather_forecast dataset/weather/weather_forcast.csv --output submission.csv
+python app.py --mode eval --training dataset/eletricity/2020年度每日尖峰備轉容量率.csv --training2 dataset/eletricity/2021年度每日尖峰備轉容量率.csv --weather_past dataset/weather/weather_day.csv --weather_forecast dataset/weather/weather_forecast.csv --output submission.csv
 ```
 
 ### Training
@@ -42,7 +42,7 @@ python app.py --mode eval --training dataset/eletricity/2020年度每日尖峰�
 ```
 或執行
 ```
-python app.py --mode train --training dataset/eletricity/2020年度每日尖峰備轉容量率.csv --training2 dataset/eletricity/2021年度每日尖峰備轉容量率.csv --weather_past dataset/weather/weather_day.csv --weather_forecast dataset/weather/weather_forcast.csv --output submission.csv
+python app.py --mode train --training dataset/eletricity/2020年度每日尖峰備轉容量率.csv --training2 dataset/eletricity/2021年度每日尖峰備轉容量率.csv --weather_past dataset/weather/weather_day.csv --weather_forecast dataset/weather/weather_forecast.csv --output submission.csv
 ```
 
 ## Dataset
