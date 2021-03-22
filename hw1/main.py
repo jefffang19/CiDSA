@@ -1,4 +1,5 @@
 from train import training
+from eval import evaluation
 
 #  You can write code above the if-main block.
 if __name__ == '__main__':
@@ -31,10 +32,13 @@ if __name__ == '__main__':
     # The following part is an example.
     # You can modify it at will.
     if args.mode == 'train':
-        model = training(args.training, args.training2,
-                         args.weather_past, args.weather_forecast)
+        print('training mode')
+        training(args.training, args.training2,
+                 args.weather_past, args.weather_forecast)
     elif args.mode == 'eval':
-        print('eval')
+        print('eval mode')
+        evaluation(args.training, args.training2,
+                   args.weather_past, args.weather_forecast)
 
     else:
         print('unknown mode, please try \'train\' or \'eval\'')
