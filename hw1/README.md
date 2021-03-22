@@ -91,5 +91,11 @@ concat(10筆電力資料, 10筆天氣資料)
 ### Output:
 未來7天備轉容量(MW)
 
+### training hyperparameters
+Loss = Mean Square Error<br>
+Optimizer = Adam<br>
+Learning Rate = 4 * 10^-4<br>
+Epoches = 100<br>
+
 ## Predict Example
 ![alt text](train_result/fit_result.png)
