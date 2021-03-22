@@ -171,7 +171,7 @@ def plot_fit_result(model, dataset):
     plt.savefig('train_result/fit_result.png')
 
 
-def training(train_data, train_data2=None, train_data3=None, train_data4=None, output=None):
+def training(train_data, train_data2=None, train_data3=None, train_data4=None, output=None, epoches=100):
 
     dataset, eletricities, avgs_temperature = getdataset(
         train_data, train_data2, train_data3, train_data4)
@@ -195,7 +195,7 @@ def training(train_data, train_data2=None, train_data3=None, train_data4=None, o
 
     # train model for N epochs
     max_valid_score = 0
-    EPOCH = 500
+    EPOCH = epoches
     for epoch in range(EPOCH):
 
         torch.cuda.empty_cache()
