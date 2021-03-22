@@ -204,7 +204,7 @@ def training(train_data, train_data2=None, train_data3=None, train_data4=None):
 
         total_loss = 0
 
-    torch.save(linear.state_dict(), 'save_model.pth')
+    torch.save(linear.state_dict(), 'weights/save_model.pth')
 
     # predict the next 7 days with electricity and weather data from past 10 days
     predict(linear, np.concatenate(
