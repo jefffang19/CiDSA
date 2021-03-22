@@ -5,6 +5,25 @@ Members: 方郁文、陳香君
 Predict the operating reserve (備轉容量) value from 2021/03/23 to 2021/03/29.
 
 ## How to run
+### Args 介紹
+```
+    '--mode':
+                       'input eval or train'
+
+    '--training':
+    和
+     '--training2':
+                       2020電力資料和2021電力資料
+
+    '--weather_past':
+                        過去一年天氣資料
+                       
+    '--weather_forecast':
+                       未來7天氣預報
+
+    '--output':
+                        output 檔案名稱
+```
 ### Evaluation
 執行 'run_eval.sh'
 ```
