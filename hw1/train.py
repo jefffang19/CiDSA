@@ -1,12 +1,12 @@
 import os
 import pandas
 import numpy as np
-from sklearn.preprocessing import normalize
 from torch.utils.data import DataLoader
 from torch.utils.data import Dataset as BaseDataset
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
+import matplotlib.pyplot as plt
 
 # create dataset using electricity and weather data
 
@@ -23,9 +23,6 @@ class Dataset(BaseDataset):
             train_data_electricity,  dtype=np.float32)
         self.train_data_weather = np.array(
             train_data_weather,  dtype=np.float32)
-
-        # self.train_data_electricity = np.array(normalize([train_data_electricity], axis=1)[0],  dtype=np.float32)
-        # self.train_data_weather = np.array(normalize([train_data_weather], axis=1)[0])
 
     def __getitem__(self, i):
         x = np.concatenate(
@@ -137,6 +134,43 @@ def predict(model, x):
     f.close()
 
 
+def plot_fit_result(model, dataset):
+    test_loaders = torch.utils.data.DataLoader(
+        dataset, batch_size=1, shuffle=False, num_workers=1)
+
+    y_collect = []
+    pred_collect = []
+
+    for x, y in test_loaders:
+        # Get data
+        if torch.cuda.is_available():
+            x = x.float().cuda()
+            y = y.float().cuda()
+        else:
+            x = x.float()
+            y = y.float()
+
+        # 1. forward propagationreal_labels
+        # -----------------------
+        pred = model(x)
+
+        for j in pred.detach().cpu().numpy():
+            pred_collect.append(j[0])
+
+        for j in x.detach().cpu().numpy():
+            y_collect.append(j[0])
+
+    x = np.arange(len(pred_collect))
+    fig, ax = plt.subplots()
+    plt.plot(x, y_collect, 'b', label='ground truth')
+    plt.plot(x, pred_collect, 'y', label='predict')
+    plt.title('model prediction')
+    plt.xlabel('dates')
+    plt.ylabel('operating_reserve(MW)')
+    leg = ax.legend(loc='upper right', shadow=True)
+    plt.savefig('train_result/fit_result.png')
+
+
 def training(train_data, train_data2=None, train_data3=None, train_data4=None):
 
     dataset, eletricities, avgs_temperature = getdataset(
@@ -161,7 +195,7 @@ def training(train_data, train_data2=None, train_data3=None, train_data4=None):
 
     # train model for N epochs
     max_valid_score = 0
-    EPOCH = 300
+    EPOCH = 100
     for epoch in range(EPOCH):
 
         torch.cuda.empty_cache()
@@ -205,6 +239,12 @@ def training(train_data, train_data2=None, train_data3=None, train_data4=None):
         total_loss = 0
 
     torch.save(linear.state_dict(), 'weights/save_model.pth')
+
+    # plot fit result
+    testset = Dataset(
+        train_data_electricity=eletricities[-100:], train_data_weather=avgs_temperature[-100:])
+
+    plot_fit_result(linear, testset)
 
     # predict the next 7 days with electricity and weather data from past 10 days
     predict(linear, np.concatenate(

@@ -7,6 +7,7 @@ from torch.utils.data import Dataset as BaseDataset
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
+import matplotlib.pyplot as plt
 # create dataset using electricity and weather data
 
 
@@ -136,9 +137,46 @@ def predict(model, x):
     f.close()
 
 
+def plot_fit_result(model, dataset):
+    test_loaders = torch.utils.data.DataLoader(
+        dataset, batch_size=1, shuffle=False, num_workers=1)
+
+    y_collect = []
+    pred_collect = []
+
+    for x, y in test_loaders:
+        # Get data
+        if torch.cuda.is_available():
+            x = x.float().cuda()
+            y = y.float().cuda()
+        else:
+            x = x.float()
+            y = y.float()
+
+        # 1. forward propagationreal_labels
+        # -----------------------
+        pred = model(x)
+
+        for j in pred.detach().cpu().numpy():
+            pred_collect.append(j[0])
+
+        for j in x.detach().cpu().numpy():
+            y_collect.append(j[0])
+
+    x = np.arange(len(pred_collect))
+    fig, ax = plt.subplots()
+    plt.plot(x, y_collect, 'b', label='ground truth')
+    plt.plot(x, pred_collect, 'y', label='predict')
+    plt.title('model prediction')
+    plt.xlabel('dates')
+    plt.ylabel('operating_reserve(MW)')
+    leg = ax.legend(loc='upper right', shadow=True)
+    plt.savefig('train_result/fit_result.png')
+
+
 def evaluation(train_data, train_data2=None, train_data3=None, train_data4=None):
 
-    dataset, eletricities, avgs_temperature = getdataset(
+    _, eletricities, avgs_temperature = getdataset(
         train_data, train_data2, train_data3, train_data4)
 
     # training
@@ -149,8 +187,14 @@ def evaluation(train_data, train_data2=None, train_data3=None, train_data4=None)
         DEVICE = 'cuda:0'
 
     linear.load_state_dict(torch.load(
-        'weights/save_model.pth', map_location=DEVICE))
+        'weights/best_save_model.pth', map_location=DEVICE))
 
     # predict the next 7 days with electricity and weather data from past 10 days
     predict(linear, np.concatenate(
         [eletricities[-10:], avgs_temperature[-10:]]))
+
+    # plot fit result
+    # testset = Dataset(
+    #     train_data_electricity=eletricities[-100:], train_data_weather=avgs_temperature[-100:])
+
+    # plot_fit_result(linear, testset)
