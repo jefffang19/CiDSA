@@ -115,12 +115,32 @@ def getdataset(train_data, train_data2=None, train_data3=None, train_data4=None)
     dataset = Dataset(train_data_electricity=eletricities,
                       train_data_weather=avgs_temperature)
 
-    return dataset
+    return dataset, eletricities, avgs_temperature
+
+# predict the next 7 days
+
+
+def predict(model, x):
+    x = torch.tensor(x, dtype=torch.float).unsqueeze(dim=0)
+    if torch.cuda.is_available():
+        x = x.cuda()
+    pred = model(x).detach().cpu().numpy().squeeze()
+
+    # save result
+    f = open('submission.csv', 'w')
+    f.write('date,operating_reserve(MW)\n')
+    print('date,operating_reserve(MW)')
+    for i, date in enumerate(range(20210323, 20210330)):
+        f.write('{},{}\n'.format(date, int(pred[i])))
+        print(('{},{}\n'.format(date, int(pred[i]))))
+
+    f.close()
 
 
 def training(train_data, train_data2=None, train_data3=None, train_data4=None):
 
-    dataset = getdataset(train_data, train_data2, train_data3, train_data4)
+    dataset, eletricities, avgs_temperature = getdataset(
+        train_data, train_data2, train_data3, train_data4)
 
     # training
     linear = LinearModel()
@@ -186,4 +206,6 @@ def training(train_data, train_data2=None, train_data3=None, train_data4=None):
 
     torch.save(linear.state_dict(), 'save_model.pth')
 
-    return linear
+    # predict the next 7 days with electricity and weather data from past 10 days
+    predict(linear, np.concatenate(
+        [eletricities[-10:], avgs_temperature[-10:]]))
