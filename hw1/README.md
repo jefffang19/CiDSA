@@ -5,6 +5,7 @@ Members: 方郁文、陳香君
 Predict the operating reserve (備轉容量) value from 2021/03/23 to 2021/03/29.
 
 ## How to run
+Python Version: 3.6.12
 ### Args 介紹
 ```
     '--mode':
