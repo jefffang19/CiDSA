@@ -90,3 +90,6 @@ concat(10筆電力資料, 10筆天氣資料)
 其中，天氣資料以及電力資料日期會錯開
 ### Output:
 未來7天備轉容量(MW)
+
+## Predict Example
+![alt text](train_result/fit_result.png)
