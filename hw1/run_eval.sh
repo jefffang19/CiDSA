@@ -1,1 +1,1 @@
-python app.py --mode eval --training dataset/eletricity/2020年度每日尖峰備轉容量率.csv --training2 dataset/eletricity/2021年度每日尖峰備轉容量率.csv --weather_past dataset/weather/weather_day.csv --weather_forecast dataset/weather/weather_forcast.csv
+python app.py --mode eval --training dataset/eletricity/2020年度每日尖峰備轉容量率.csv --training2 dataset/eletricity/2021年度每日尖峰備轉容量率.csv --weather_past dataset/weather/weather_day.csv --weather_forecast dataset/weather/weather_forecast.csv --output submission.csv

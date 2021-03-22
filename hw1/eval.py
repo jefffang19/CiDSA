@@ -120,14 +120,14 @@ def getdataset(train_data, train_data2=None, train_data3=None, train_data4=None)
 # predict the next 7 days
 
 
-def predict(model, x):
+def predict(model, x, output):
     x = torch.tensor(x, dtype=torch.float).unsqueeze(dim=0)
     if torch.cuda.is_available():
         x = x.cuda()
     pred = model(x).detach().cpu().numpy().squeeze()
 
     # save result
-    f = open('submission.csv', 'w')
+    f = open(output, 'w')
     f.write('date,operating_reserve(MW)\n')
     print('date,operating_reserve(MW)')
     for i, date in enumerate(range(20210323, 20210330)):
@@ -174,7 +174,7 @@ def plot_fit_result(model, dataset):
     plt.savefig('train_result/fit_result.png')
 
 
-def evaluation(train_data, train_data2=None, train_data3=None, train_data4=None):
+def evaluation(train_data, train_data2=None, train_data3=None, train_data4=None, output=None):
 
     _, eletricities, avgs_temperature = getdataset(
         train_data, train_data2, train_data3, train_data4)
@@ -191,7 +191,7 @@ def evaluation(train_data, train_data2=None, train_data3=None, train_data4=None)
 
     # predict the next 7 days with electricity and weather data from past 10 days
     predict(linear, np.concatenate(
-        [eletricities[-10:], avgs_temperature[-10:]]))
+        [eletricities[-10:], avgs_temperature[-10:]]), output)
 
     # plot fit result
     # testset = Dataset(

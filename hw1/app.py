@@ -34,11 +34,11 @@ if __name__ == '__main__':
     if args.mode == 'train':
         print('training mode')
         training(args.training, args.training2,
-                 args.weather_past, args.weather_forecast)
+                 args.weather_past, args.weather_forecast, args.output)
     elif args.mode == 'eval':
         print('eval mode')
         evaluation(args.training, args.training2,
-                   args.weather_past, args.weather_forecast)
+                   args.weather_past, args.weather_forecast, args.output)
 
     else:
         print('unknown mode, please try \'train\' or \'eval\'')
